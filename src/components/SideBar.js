@@ -1,16 +1,29 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { APP_MARGIN_LEFT } from '@/const/Layout';
+import SideBarName from './SideBarName';
 
 const useStyles = makeStyles((theme) => ({
   sideBar: {
     width: `${APP_MARGIN_LEFT}px`,
-    height: '100%',
+    minHeight: '100%',
+    backgroundColor: theme.palette.primary.main,
+    color: '#fff',
   },
+  sideContent: {
+    padding: theme.spacing(1),
+  }
 }));
 const SideBar = () => {
   const classes = useStyles();
-  return <div className={classes.sideBar}>test</div>;
+  return (
+    <div className={classes.sideBar}>
+      <SideBarName text="Test" />
+      <div className={classes.sideContent}>
+
+      </div>
+    </div>
+  );
 };
 
 export default SideBar;
