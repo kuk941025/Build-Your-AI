@@ -8,7 +8,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <CssBaseline>
-        <Navigation />
+        <Navigation title="Build Your AI" />
         <Switch>
           <Route exact path="/" component={Main} />
         </Switch>

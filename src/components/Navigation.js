@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navigation = () => {
+const Navigation = ({ title = '' }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Buiild AI
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>
