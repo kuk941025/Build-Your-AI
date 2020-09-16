@@ -1,19 +1,17 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Main from '@/pages/Main';
-import Navigation from '@/components/Navigation';
+import GlobalLayout from '@/components/GlobalLayout';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <CssBaseline>
-        <Navigation title="Build Your AI" />
+    <GlobalLayout>
+      <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Main} />
         </Switch>
-      </CssBaseline>
-    </BrowserRouter>
+      </BrowserRouter>
+    </GlobalLayout>
   );
 };
 

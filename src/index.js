@@ -7,10 +7,10 @@ import * as serviceWorker from './serviceWorker';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#a5d6a7',
+      main: '#1b2430',
     },
     secondary: {
-      main: '#ffd54f',
+      main: '#2196f3',
     },
   },
 });
