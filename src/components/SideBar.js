@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { APP_MARGIN_LEFT } from '@/const/Layout';
 import SideBarName from './SideBarName';
+import SideList from './SideList';
 
 const useStyles = makeStyles((theme) => ({
   sideBar: {
@@ -11,16 +12,17 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   sideContent: {
-    padding: theme.spacing(1),
-  }
+    paddingTop: theme.spacing(1),
+  },
 }));
+
 const SideBar = () => {
   const classes = useStyles();
   return (
     <div className={classes.sideBar}>
       <SideBarName text="Test" />
       <div className={classes.sideContent}>
-
+        <SideList />
       </div>
     </div>
   );

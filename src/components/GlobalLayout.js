@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     padding: `${APP_HEIGHT + theme.spacing(1)}px ${theme.spacing(3)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
   },
 }));
+
 const GlobalLayout = ({ children }) => {
   const classes = useStyles();
   return (
