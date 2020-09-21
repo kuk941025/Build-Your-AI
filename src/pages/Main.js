@@ -20,8 +20,6 @@ const Main = () => {
   const classes = useStyles();
   const [board, setBoard] = useState(initBoard);
   const handleBoardClick = (x, y, stoneType) => {
-    if (board[y][x] > 0) return;
-
     const copied = [...board];
     copied[y][x] = stoneType;
     setBoard(copied);
