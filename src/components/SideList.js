@@ -16,9 +16,9 @@ const SideList = () => {
 
   return (
     <List>
-      <ListItem className={classes.listItem} hover button>test</ListItem>
-      <ListItem className={classes.listItem} hover button>test</ListItem>
-      <ListItem className={classes.listItem} hover button>test</ListItem>
+      <ListItem className={classes.listItem} button>test</ListItem>
+      <ListItem className={classes.listItem} button>test</ListItem>
+      <ListItem className={classes.listItem} button>test</ListItem>
     </List>
   )
 }
