@@ -7,6 +7,7 @@ import SideList from './SideList';
 const useStyles = makeStyles((theme) => ({
   sideBar: {
     width: `${APP_MARGIN_LEFT}px`,
+    minWidth: `${APP_MARGIN_LEFT}px`,
     minHeight: '100%',
     backgroundColor: theme.palette.primary.main,
     color: '#fff',
