@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { BOARD_SIZE, BLACK_STONE, WHITE_STONE } from '@/const/Game';
-import { convert2Img } from '@/utils/converter';
+import { convert2Img, getCoord } from '@/utils';
 import BoardImg from './images/Board.png';
 import BlackStoneImg from './images/BlackStone.png';
 import WhiteStoneImg from './images/WhiteStone.png';
@@ -24,8 +24,8 @@ const Board = ({ size = 600, onClick = null }) => {
   useEffect(() => {
     if (!canv) return;
     const ctx = canv.current.getContext('2d');
-    ctx.canvas.width = size;
-    ctx.canvas.height = size;
+    ctx.canvas.width = boxSize * BOARD_SIZE + (pad * 2);
+    ctx.canvas.height = boxSize * BOARD_SIZE + (pad * 2);
 
     const boardImg = convert2Img(BoardImg);
     boardImg.onload = () => {
@@ -38,21 +38,19 @@ const Board = ({ size = 600, onClick = null }) => {
     e.stopPropagation();
 
     const rect = canv.current.getBoundingClientRect();
-    const x = Math.round((e.clientX - rect.left - pad) / (boxSize));
-    const y = Math.round((e.clientY - rect.top - pad) / (boxSize));
-
+    const x = getCoord({ mouseCoord: e.clientX, boxCoord: rect.left, pad, boxSize });
+    const y = getCoord({ mouseCoord: e.clientY, boxCoord: rect.top, pad, boxSize });
+    
     if (x < 0 || y < 0) return;
     onClick && onClick(x, y);
-    
     placeStone(whiteStone.current, x, y);
-    // ctx.drawImage(blackStone.current, x * boxSize + pad, y * boxSize + pad, boxSize - pad, boxSize - pad);
   };
 
   const placeStone = (stoneImg, x, y) => {
     const minusPos = Math.floor((boxSize - pad) / 2);
     const ctx = canv.current.getContext('2d');
-    ctx.drawImage(stoneImg, x * boxSize + pad - minusPos, y * boxSize + pad - minusPos, boxSize - pad, boxSize - pad); 
-  }
+    ctx.drawImage(stoneImg, x * boxSize + pad - minusPos, y * boxSize + pad - minusPos, boxSize - pad, boxSize - pad);
+  };
   return <canvas ref={canv} onClick={handleOnClick} />;
 };
 
