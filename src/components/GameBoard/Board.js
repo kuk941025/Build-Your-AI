@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { BOARD_SIZE } from '@/const/Game';
+import { BOARD_SIZE, BLACK_STONE, WHITE_STONE } from '@/const/Game';
 import { convert2Img } from '@/utils/converter';
 import BoardImg from './images/Board.png';
 import BlackStoneImg from './images/BlackStone.png';
@@ -38,12 +38,21 @@ const Board = ({ size = 600, onClick = null }) => {
     e.stopPropagation();
 
     const rect = canv.current.getBoundingClientRect();
-    const x = Math.round((e.clientX - rect.left) / (boxSize + pad));
-    const y = Math.round((e.clientY - rect.top) / (boxSize + pad));
+    const x = Math.round((e.clientX - rect.left - pad) / (boxSize));
+    const y = Math.round((e.clientY - rect.top - pad) / (boxSize));
 
     if (x < 0 || y < 0) return;
     onClick && onClick(x, y);
+    
+    placeStone(whiteStone.current, x, y);
+    // ctx.drawImage(blackStone.current, x * boxSize + pad, y * boxSize + pad, boxSize - pad, boxSize - pad);
   };
+
+  const placeStone = (stoneImg, x, y) => {
+    const minusPos = Math.floor((boxSize - pad) / 2);
+    const ctx = canv.current.getContext('2d');
+    ctx.drawImage(stoneImg, x * boxSize + pad - minusPos, y * boxSize + pad - minusPos, boxSize - pad, boxSize - pad); 
+  }
   return <canvas ref={canv} onClick={handleOnClick} />;
 };
 
