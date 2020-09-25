@@ -16,9 +16,8 @@ const SideList = () => {
 
   return (
     <List>
-      <ListItem className={classes.listItem} button>test</ListItem>
-      <ListItem className={classes.listItem} button>test</ListItem>
-      <ListItem className={classes.listItem} button>test</ListItem>
+      <ListItem className={classes.listItem} button>Play</ListItem>
+      <ListItem className={classes.listItem} button>Build</ListItem>
     </List>
   )
 }

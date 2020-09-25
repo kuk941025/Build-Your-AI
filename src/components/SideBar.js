@@ -21,7 +21,7 @@ const SideBar = () => {
   const classes = useStyles();
   return (
     <div className={classes.sideBar}>
-      <SideBarName text="Test" />
+      <SideBarName text="JK Park" />
       <div className={classes.sideContent}>
         <SideList />
       </div>
