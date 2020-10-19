@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { BOARD_SIZE, BLACK_STONE } from '@/const/Game';
 import { convert2Img, getCoord } from '@/utils';
+
 import BoardImg from './images/Board.png';
 import BlackStoneImg from './images/BlackStone.png';
 import WhiteStoneImg from './images/WhiteStone.png';
@@ -18,11 +19,12 @@ const Board = ({ size = 600, onClick = null, board }) => {
   const stoneType = useRef(1);
   const blackStone = useRef(convert2Img(BlackStoneImg));
   const whiteStone = useRef(convert2Img(WhiteStoneImg));
+  const [loaded, setLoaded] = useState(false);
   const boxSize = Math.floor(size / BOARD_SIZE);
   const pad = Math.floor(boxSize / 4);
 
   const handleOnClick = (e) => {
-    e.stopPropagation();
+    e.preventDefault();
 
     const rect = canv.current.getBoundingClientRect();
     const x = getCoord({ mouseCoord: e.clientX, boxCoord: rect.left, pad, boxSize });
@@ -31,7 +33,6 @@ const Board = ({ size = 600, onClick = null, board }) => {
     if (x < 0 || y < 0) return;
     if (board[y][x] > 0) return;
     onClick && onClick(x, y, stoneType.current);
-
     stoneType.current = (stoneType.current % 2) + 1;
   };
 
@@ -56,16 +57,19 @@ const Board = ({ size = 600, onClick = null, board }) => {
     boardImg.onload = () => {
       ctx.drawImage(boardImg, 0, 0, size, size);
       drawLines({ ctx, boxSize, pad });
+      setLoaded(true);
     };
   }, [boxSize, pad, size]);
 
   useEffect(() => {
+    if (!loaded) return;
+
     board.forEach((row, y) => {
       row.forEach((stoneType, x) => {
         if (stoneType > 0) placeStone(stoneType, x, y);
       });
     });
-  }, [board, placeStone]);
+  }, [board, loaded, placeStone]);
 
   return <canvas ref={canv} onClick={handleOnClick} />;
 };
