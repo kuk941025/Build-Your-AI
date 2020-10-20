@@ -67,5 +67,5 @@ const countStones = (board, startPos = [], stone) => {
       ...pos,
       cnt: count(pos),
     }))
-    .filter((pos) => pos.cnt > 0);
+    .filter((pos) => pos.cnt > 1);
 };
