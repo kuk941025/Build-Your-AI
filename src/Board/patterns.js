@@ -49,23 +49,50 @@ const countStones = (board, startPos = [], stone) => {
     let cnt = 0;
 
     if (dir === DIRECTIONS.VERT) {
-      while (y + 1 < BOARD_SIZE && board[y++][x] === stone) cnt++;
-      return cnt;
+      while (y + 1 < BOARD_SIZE && board[y][x] === stone) {
+        cnt++;
+        y++;
+      }
+
+      return {
+        cnt,
+        end_x: x,
+        end_y: y === BOARD_SIZE ? y : y - 1,
+      };
     }
 
     if (dir === DIRECTIONS.HORI) {
-      while (x + 1 < BOARD_SIZE && board[y][x++] === stone) cnt++;
-      return cnt;
+      while (x + 1 <= BOARD_SIZE && board[y][x] === stone) {
+        cnt++;
+        x++;
+      }
+
+      return {
+        cnt,
+        end_x: x === BOARD_SIZE ? x : x - 1,
+        end_y: y,
+      };
     }
 
-    while (x + 1 < BOARD_SIZE && y + 1 < BOARD_SIZE && board[y++][x++] === stone) cnt++;
-    return cnt;
+    while (x + 1 < BOARD_SIZE && y + 1 < BOARD_SIZE && board[y][x] === stone) {
+      cnt++;
+      y++;
+      x++;
+    }
+
+    return {
+      cnt,
+      end_x: x === BOARD_SIZE ? x : x - 1,
+      end_y: y === BOARD_SIZE ? y : y - 1,
+    };
   };
 
   return startPos
     .map((pos) => ({
       ...pos,
-      cnt: count(pos),
+      ...count(pos),
     }))
     .filter((pos) => pos.cnt > 1);
 };
+
+const addDefended = (board, startPos = [], stone) => {};
