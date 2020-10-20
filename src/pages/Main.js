@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
 import Board from '@/components/GameBoard';
 import { makeStyles } from '@material-ui/core/styles';
-import { BOARD_SIZE } from '@/const/Game';
-import { generateData, makeFourFour, makeOmok } from '@/Board/data';
+import { tempData } from '@/Board/data';
+import { check } from '@/Board/patterns';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,40 +16,43 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const initBoard = new Array(BOARD_SIZE).fill(0).map(() => new Array(BOARD_SIZE).fill(0));
-const data = generateData(makeFourFour());
-console.log(data);
-
 const Main = () => {
   const classes = useStyles();
-  const [boards, setBoards] = useState([
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-    generateData(makeFourFour()),
-  ]);
+  const [board, setBoard] = useState(tempData);
+  const [lastClicked, setClicked] = useState({ x: 0, y: 0, stone: 0 });
   // const [board, setBoard] = useState(data);
-  const handleBoardClick = (idx) => (x, y, stoneType) => {
-    const copied = [...boards[idx]];
+  // const handleBoardClick = (idx) => (x, y, stoneType) => {
+  //   const copied = [...boards[idx]];
+  //   copied[y][x] = stoneType;
+
+  //   setBoards(
+  //     boards.map((board, bIdx) => {
+  //       if (bIdx !== idx) return board;
+  //       else return copied;
+  //     })
+  //   );
+  // };
+
+  const handleBoardClick = (x, y, stoneType) => {
+    const copied = [...board];
     copied[y][x] = stoneType;
 
-    setBoards(
-      boards.map((board, bIdx) => {
-        if (bIdx !== idx) return board;
-        else return copied;
-      })
-    );
+    setBoard(copied);
+    setClicked({ x, y, stone: stoneType });
   };
 
+  const handleShowStats = () => {
+    console.log(check(board, lastClicked));
+  };
   return (
     <div className={classes.root}>
-      {boards.map((board, idx) => (
+      {/* {boards.map((board, idx) => (
         <Board onClick={handleBoardClick(idx)} key={idx} size={200} board={board} />
-      ))}
+      ))} */}
+      <Board onClick={handleBoardClick} size={600} board={board} />
+      <Button onClick={handleShowStats} variant="contained" color="primary">
+        Show
+      </Button>
     </div>
   );
 };

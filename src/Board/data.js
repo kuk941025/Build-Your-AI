@@ -1,11 +1,11 @@
 import { BOARD_SIZE, BLACK_STONE, WHITE_STONE } from '@/const/Game';
 
-const tempData = [
+export const tempData = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -23,8 +23,13 @@ const tempData = [
 ];
 
 export const generateData = (inputs = []) => {
-  const tempData = Array(BOARD_SIZE).fill(0).map(_ => Array(BOARD_SIZE).fill(0).map(__ => __))
-  // const copy = tempData.map((rows) => rows);
+  const tempData = Array(BOARD_SIZE)
+    .fill(0)
+    .map((_) =>
+      Array(BOARD_SIZE)
+        .fill(0)
+        .map((__) => __)
+    );
   inputs.forEach(([row, col, value]) => (tempData[row][col] = value));
 
   return tempData;
@@ -94,3 +99,5 @@ export const makeFourFour = () => {
         .map((_, idx) => [startPos + idx + 1, startPos, BLACK_STONE])
     );
 };
+
+export const makeFourThree = () => {};
