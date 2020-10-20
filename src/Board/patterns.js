@@ -24,14 +24,14 @@ const relocateCursors = (board = [[]], pos = { x: 0, y: 0, stone: 0 }) => {
   while (y - 1 >= 0 && board[y - 1][x] === pos.stone) {
     y--;
   }
-  y !== pos.y && results.push({ x, y, dir: DIRECTIONS.VERT });
+  results.push({ x, y, dir: DIRECTIONS.VERT });
 
   x = pos.x;
   y = pos.y;
   while (x - 1 >= 0 && board[y][x - 1] === pos.stone) {
     x--;
   }
-  x !== pos.x && results.push({ x, y, dir: DIRECTIONS.HORI });
+  results.push({ x, y, dir: DIRECTIONS.HORI });
 
   x = pos.x;
   y = pos.y;
@@ -39,7 +39,7 @@ const relocateCursors = (board = [[]], pos = { x: 0, y: 0, stone: 0 }) => {
     y--;
     x--;
   }
-  x !== pos.x && y !== pos.y && results.push({ x, y, dir: DIRECTIONS.DIAG });
+  results.push({ x, y, dir: DIRECTIONS.DIAG });
 
   return results;
 };
@@ -62,8 +62,10 @@ const countStones = (board, startPos = [], stone) => {
     return cnt;
   };
 
-  return startPos.map((pos) => ({
-    ...pos,
-    cnt: count(pos),
-  }));
+  return startPos
+    .map((pos) => ({
+      ...pos,
+      cnt: count(pos),
+    }))
+    .filter((pos) => pos.cnt > 0);
 };
