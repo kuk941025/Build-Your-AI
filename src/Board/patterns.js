@@ -1,18 +1,13 @@
-import { BOARD_SIZE } from '@/const/Game';
+import { BOARD_SIZE, DIRECTIONS } from '@/const/Game';
 import { getOppStone } from '@/utils/BoardUtils';
 
 export const check = (board = [[]], last = {}) => {
   const startPos = relocateCursors(board, last);
   const countedStones = countStones(board, startPos, last.stone);
 
-  console.log(checkDefenses(board, countedStones, last.stone));
-  return countedStones;
-};
-
-const DIRECTIONS = {
-  VERT: 0,
-  HORI: 1,
-  DIAG: 2,
+  const checkedDefense = checkDefenses(board, countedStones, last.stone);
+  checkEmpty(board, checkedDefense, last.stone);
+  return checkedDefense;
 };
 
 //relocate cursor to possible starting points
@@ -97,8 +92,6 @@ const countStones = (board, startPos = [], stone) => {
     .filter((pos) => pos.cnt > 1);
 };
 
-
-
 const checkDefenses = (board = [[]], positions = [], stone) => {
   const checkDefense = ({ x, y, dir, end_x, end_y }) => {
     let defenses = 0;
@@ -119,10 +112,10 @@ const checkDefenses = (board = [[]], positions = [], stone) => {
       return defenses;
     }
 
-    if (x === 0 && y === 0) defenses++;
+    if (x === 0 || y === 0) defenses++;
     else x - 1 >= 0 && y - 1 >= 0 && board[y - 1][x - 1] === getOppStone(stone) && defenses++;
 
-    if (end_x + 1 >= BOARD_SIZE && end_y + 1 >= BOARD_SIZE) defenses++;
+    if (end_x + 1 >= BOARD_SIZE || end_y + 1 >= BOARD_SIZE) defenses++;
     else
       end_x + 1 < BOARD_SIZE &&
         end_y + 1 < BOARD_SIZE &&
@@ -136,4 +129,9 @@ const checkDefenses = (board = [[]], positions = [], stone) => {
     ...pos,
     defenses: checkDefense(pos),
   }));
+};
+
+// if next space is an empty space, start count from the next next stone
+const checkEmpty = (board = [[]], positions = [], stone) => {
+  console.log(board, positions, stone);
 };
