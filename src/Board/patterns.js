@@ -3,11 +3,13 @@ import { getOppStone } from '@/utils/BoardUtils';
 
 export const check = (board = [[]], last = {}) => {
   const startPos = relocateCursors(board, last);
-  const countedStones = countStones(board, startPos, last.stone);
 
+  const countedStones = countStones(board, startPos, last.stone);
   const checkedDefense = checkDefenses(board, countedStones, last.stone);
-  checkEmpty(board, checkedDefense, last.stone);
-  return checkedDefense;
+  console.log(checkedDefense);
+
+  // checkEmpty(board, checkedDefense, last.stone);
+  // return checkedDefense;
 };
 
 //relocate cursor to possible starting points
@@ -38,6 +40,14 @@ const relocateCursors = (board = [[]], pos = { x: 0, y: 0, stone: 0 }) => {
   }
   results.push({ x, y, dir: DIRECTIONS.DIAG });
 
+  x = pos.x;
+  y = pos.y;
+  while (x + 1 < BOARD_SIZE && y - 1 >= 0 && board[y - 1][x + 1] === pos.stone) {
+    y--;
+    x++;
+  }
+  results.push({ x, y, dir: DIRECTIONS.DIAG_LEFT });
+
   return results;
 };
 
@@ -46,7 +56,7 @@ const countStones = (board, startPos = [], stone) => {
     let cnt = 0;
 
     if (dir === DIRECTIONS.VERT) {
-      while (y + 1 < BOARD_SIZE && board[y][x] === stone) {
+      while (y < BOARD_SIZE && board[y][x] === stone) {
         cnt++;
         y++;
       }
@@ -59,7 +69,7 @@ const countStones = (board, startPos = [], stone) => {
     }
 
     if (dir === DIRECTIONS.HORI) {
-      while (x + 1 <= BOARD_SIZE && board[y][x] === stone) {
+      while (x < BOARD_SIZE && board[y][x] === stone) {
         cnt++;
         x++;
       }
@@ -71,15 +81,29 @@ const countStones = (board, startPos = [], stone) => {
       };
     }
 
-    while (x + 1 < BOARD_SIZE && y + 1 < BOARD_SIZE && board[y][x] === stone) {
+    if (dir === DIRECTIONS.DIAG) {
+      while (x < BOARD_SIZE && y < BOARD_SIZE && board[y][x] === stone) {
+        cnt++;
+        y++;
+        x++;
+      }
+
+      return {
+        cnt,
+        end_x: x === BOARD_SIZE ? x : x - 1,
+        end_y: y === BOARD_SIZE ? y : y - 1,
+      };
+    }
+
+    while (x >= 0 && y < BOARD_SIZE && board[y][x] === stone) {
       cnt++;
       y++;
-      x++;
+      x--;
     }
 
     return {
       cnt,
-      end_x: x === BOARD_SIZE ? x : x - 1,
+      end_x: x <= 0 ? 0 : x - 1,
       end_y: y === BOARD_SIZE ? y : y - 1,
     };
   };
@@ -110,14 +134,28 @@ const checkDefenses = (board = [[]], positions = [], stone) => {
       return defenses;
     }
 
-    if (x === 0 || y === 0) defenses++;
-    else x - 1 >= 0 && y - 1 >= 0 && board[y - 1][x - 1] === getOppStone(stone) && defenses++;
+    if (dir === DIRECTIONS.DIAG) {
+      if (x === 0 || y === 0) defenses++;
+      else x - 1 >= 0 && y - 1 >= 0 && board[y - 1][x - 1] === getOppStone(stone) && defenses++;
 
-    if (end_x + 1 >= BOARD_SIZE || end_y + 1 >= BOARD_SIZE) defenses++;
+      if (end_x + 1 >= BOARD_SIZE || end_y + 1 >= BOARD_SIZE) defenses++;
+      else
+        end_x + 1 < BOARD_SIZE &&
+          end_y + 1 < BOARD_SIZE &&
+          board[end_y + 1][end_x + 1] === getOppStone(stone) &&
+          defenses++;
+
+      return defenses;
+    }
+
+    if (x + 1 >= BOARD_SIZE || y === 0) defenses++;
+    else x + 1 < BOARD_SIZE && y - 1 >= 0 && board[y - 1][x + 1] === getOppStone(stone) && defenses++;
+
+    if (end_x - 1 >= BOARD_SIZE || end_y + 1 >= BOARD_SIZE) defenses++;
     else
-      end_x + 1 < BOARD_SIZE &&
+      end_x - 1 < BOARD_SIZE &&
         end_y + 1 < BOARD_SIZE &&
-        board[end_y + 1][end_x + 1] === getOppStone(stone) &&
+        board[end_y + 1][end_x - 1] === getOppStone(stone) &&
         defenses++;
 
     return defenses;
@@ -140,7 +178,7 @@ const checkEmpty = (board = [[]], positions = [], stone) => {
     }
     if (dir === DIRECTIONS.HORI) {
       x > 0 && board[y][x - 1] === 0 && empty.push({ x: x - 1, y });
-      end_x + 1 < BOARD_SIZE && board[end_y][end_x + 1] === 0&& empty.push({ x: end_x + 1, y: end_y });
+      end_x + 1 < BOARD_SIZE && board[end_y][end_x + 1] === 0 && empty.push({ x: end_x + 1, y: end_y });
       return empty;
     }
 
