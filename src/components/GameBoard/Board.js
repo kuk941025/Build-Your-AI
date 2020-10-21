@@ -32,6 +32,8 @@ const Board = ({ size = 600, onClick = null, board }) => {
 
     if (x < 0 || y < 0) return;
     if (board[y][x] > 0) return;
+    if (x >= BOARD_SIZE || y >= BOARD_SIZE) return;
+
     onClick && onClick(x, y, stoneType.current);
     stoneType.current = (stoneType.current % 2) + 1;
   };
