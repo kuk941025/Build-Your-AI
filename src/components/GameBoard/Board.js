@@ -30,9 +30,10 @@ const Board = ({ size = 600, onClick = null, board }) => {
     const x = getCoord({ mouseCoord: e.clientX, boxCoord: rect.left, pad, boxSize });
     const y = getCoord({ mouseCoord: e.clientY, boxCoord: rect.top, pad, boxSize });
 
+
     if (x < 0 || y < 0) return;
-    if (board[y][x] > 0) return;
     if (x >= BOARD_SIZE || y >= BOARD_SIZE) return;
+    if (board[y][x] > 0) return;
 
     onClick && onClick(x, y, stoneType.current);
     stoneType.current = (stoneType.current % 2) + 1;
