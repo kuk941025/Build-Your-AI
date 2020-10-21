@@ -84,12 +84,10 @@ const countStones = (board, startPos = [], stone) => {
     };
   };
 
-  return startPos
-    .map((pos) => ({
-      ...pos,
-      ...count(pos),
-    }))
-    .filter((pos) => pos.cnt > 1);
+  return startPos.map((pos) => ({
+    ...pos,
+    ...count(pos),
+  }));
 };
 
 const checkDefenses = (board = [[]], positions = [], stone) => {
@@ -133,5 +131,28 @@ const checkDefenses = (board = [[]], positions = [], stone) => {
 
 // if next space is an empty space, start count from the next next stone
 const checkEmpty = (board = [[]], positions = [], stone) => {
-  console.log(board, positions, stone);
+  const getEmptyPositions = ({ x, y, end_x, end_y, dir }) => {
+    const empty = [];
+    if (dir === DIRECTIONS.VERT) {
+      y > 0 && board[y - 1][x] === 0 && empty.push({ x, y: y - 1 });
+      end_y + 1 < BOARD_SIZE && board[end_y + 1][end_x] === 0 && empty.push({ x: end_x, y: end_y + 1 });
+      return empty;
+    }
+    if (dir === DIRECTIONS.HORI) {
+      x > 0 && board[y][x - 1] === 0 && empty.push({ x: x - 1, y });
+      end_x + 1 < BOARD_SIZE && board[end_y][end_x + 1] === 0&& empty.push({ x: end_x + 1, y: end_y });
+      return empty;
+    }
+
+    x > 0 && y > 0 && board[y - 1][x - 1] === 0 && empty.push({ x: x - 1, y: y - 1 });
+    end_x + 1 < BOARD_SIZE &&
+      end_y + 1 < BOARD_SIZE &&
+      board[end_y + 1][end_x + 1] === 0 &&
+      empty.push({ x: end_x + 1, y: end_y + 1 });
+
+    return empty;
+  };
+
+  const emptyPositions = positions.map((pos) => ({ dir: pos.dir, empty: getEmptyPositions(pos) }));
+  console.log(emptyPositions);
 };
