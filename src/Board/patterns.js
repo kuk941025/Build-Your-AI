@@ -1,54 +1,28 @@
 import { BOARD_SIZE, DIRECTIONS } from '@/const/Game';
-import { getOppStone } from '@/utils/BoardUtils';
+import { getOppStone, validatePos } from '@/utils/BoardUtils';
+import * as Relocate from './relocate';
 
 export const check = (board = [[]], last = {}) => {
-  const startPos = relocateCursors(board, last);
+  const startPos = relocateCursors(board, last, last.stone);
 
-  const countedStones = countStones(board, startPos, last.stone);
-  const checkedDefense = checkDefenses(board, countedStones, last.stone);
-  console.log(checkedDefense);
-
-  // checkEmpty(board, checkedDefense, last.stone);
+  const evaluatedStones = evaluateStone(board, startPos, last.stone);
+  const res = checkEmpty(board, evaluatedStones, last.stone);
+  console.log(res);
   // return checkedDefense;
 };
 
+const evaluateStone = (board, startPos, stone) => checkDefenses(board, countStones(board, startPos, stone), stone);
+
 //relocate cursor to possible starting points
-const relocateCursors = (board = [[]], pos = { x: 0, y: 0, stone: 0 }) => {
-  if (!pos.stone) return [];
+const relocateCursors = (board = [[]], pos = { x: 0, y: 0 }, stone) => {
+  if (!stone) return [];
 
-  const results = [];
-  let x = pos.x;
-  let y = pos.y;
-
-  while (y - 1 >= 0 && board[y - 1][x] === pos.stone) {
-    y--;
-  }
-  results.push({ x, y, dir: DIRECTIONS.VERT });
-
-  x = pos.x;
-  y = pos.y;
-  while (x - 1 >= 0 && board[y][x - 1] === pos.stone) {
-    x--;
-  }
-  results.push({ x, y, dir: DIRECTIONS.HORI });
-
-  x = pos.x;
-  y = pos.y;
-  while (x - 1 >= 0 && y - 1 >= 0 && board[y - 1][x - 1] === pos.stone) {
-    y--;
-    x--;
-  }
-  results.push({ x, y, dir: DIRECTIONS.DIAG });
-
-  x = pos.x;
-  y = pos.y;
-  while (x + 1 < BOARD_SIZE && y - 1 >= 0 && board[y - 1][x + 1] === pos.stone) {
-    y--;
-    x++;
-  }
-  results.push({ x, y, dir: DIRECTIONS.DIAG_LEFT });
-
-  return results;
+  return [
+    Relocate.vert(board, pos, stone),
+    Relocate.hor(board, pos, stone),
+    Relocate.diag(board, pos, stone),
+    Relocate.diagLeft(board, pos, stone),
+  ];
 };
 
 const countStones = (board, startPos = [], stone) => {
@@ -64,7 +38,7 @@ const countStones = (board, startPos = [], stone) => {
       return {
         cnt,
         end_x: x,
-        end_y: y === BOARD_SIZE ? y : y - 1,
+        end_y: y >= BOARD_SIZE ? BOARD_SIZE - 1 : y - 1,
       };
     }
 
@@ -76,7 +50,7 @@ const countStones = (board, startPos = [], stone) => {
 
       return {
         cnt,
-        end_x: x === BOARD_SIZE ? x : x - 1,
+        end_x: x >= BOARD_SIZE ? BOARD_SIZE - 1 : x - 1,
         end_y: y,
       };
     }
@@ -90,8 +64,8 @@ const countStones = (board, startPos = [], stone) => {
 
       return {
         cnt,
-        end_x: x === BOARD_SIZE ? x : x - 1,
-        end_y: y === BOARD_SIZE ? y : y - 1,
+        end_x: x >= BOARD_SIZE ? BOARD_SIZE - 1 : x - 1,
+        end_y: y >= BOARD_SIZE ? BOARD_SIZE - 1 : y - 1,
       };
     }
 
@@ -103,8 +77,8 @@ const countStones = (board, startPos = [], stone) => {
 
     return {
       cnt,
-      end_x: x <= 0 ? 0 : x - 1,
-      end_y: y === BOARD_SIZE ? y : y - 1,
+      end_x: x < 0 ? 0 : x + 1,
+      end_y: y >= BOARD_SIZE ? BOARD_SIZE - 1 : y - 1,
     };
   };
 
@@ -169,28 +143,65 @@ const checkDefenses = (board = [[]], positions = [], stone) => {
 
 // if next space is an empty space, start count from the next next stone
 const checkEmpty = (board = [[]], positions = [], stone) => {
-  const getEmptyPositions = ({ x, y, end_x, end_y, dir }) => {
+  const getPos = ({ x, y, end_x, end_y, dir }) => {
     const empty = [];
     if (dir === DIRECTIONS.VERT) {
-      y > 0 && board[y - 1][x] === 0 && empty.push({ x, y: y - 1 });
-      end_y + 1 < BOARD_SIZE && board[end_y + 1][end_x] === 0 && empty.push({ x: end_x, y: end_y + 1 });
-      return empty;
+      if (y > 0 && board[y - 1][x] === 0) {
+        const newPos = { x: x, y: y - 2, dir };
+        validatePos(board, newPos, stone) && empty.push(newPos);
+      }
+      if (end_y + 1 < BOARD_SIZE && board[end_y + 1][end_x] === 0) {
+        const newPos = { x: end_x, y: end_y + 2, dir };
+        validatePos(board, newPos, stone) && empty.push(newPos);
+      }
+
+      return empty.map((coord) => Relocate.vert(board, coord, stone));
     }
+
     if (dir === DIRECTIONS.HORI) {
-      x > 0 && board[y][x - 1] === 0 && empty.push({ x: x - 1, y });
-      end_x + 1 < BOARD_SIZE && board[end_y][end_x + 1] === 0 && empty.push({ x: end_x + 1, y: end_y });
-      return empty;
+      if (x > 0 && board[y][x - 1] === 0) {
+        const newPos = { x: x - 2 ,y: y, dir };
+        validatePos(board, newPos, stone) && empty.push(newPos);
+      }
+      if (end_x + 1 < BOARD_SIZE && board[end_y][end_x + 1] === 0) {
+        const newPos = { x: end_x + 2, y: end_y, dir };
+        validatePos(board, newPos, stone) && empty.push(newPos);
+      }
+
+      return empty.map((coord) => Relocate.hor(board, coord, stone));
     }
 
-    x > 0 && y > 0 && board[y - 1][x - 1] === 0 && empty.push({ x: x - 1, y: y - 1 });
-    end_x + 1 < BOARD_SIZE &&
-      end_y + 1 < BOARD_SIZE &&
-      board[end_y + 1][end_x + 1] === 0 &&
-      empty.push({ x: end_x + 1, y: end_y + 1 });
+    if (dir === DIRECTIONS.DIAG) {
+      if (x > 0 && y > 0 && board[y - 1][x - 1] === 0) {
+        const newPos = { x: x - 2, y: y - 2, dir };
+        validatePos(board, newPos, stone) && empty.push(newPos);
+      }
+      if (end_x + 1 < BOARD_SIZE && end_y + 1 < BOARD_SIZE && board[end_y + 1][end_x + 1] === 0) {
+        const newPos = { x: end_x + 2, y: end_y + 2, dir };
+        validatePos(board, newPos, stone) && empty.push(newPos);
+      }
 
-    return empty;
+      return empty.map((coord) => Relocate.diag(board, coord, stone));
+    }
+
+    if (x + 1 < BOARD_SIZE && y > 0 && board[y - 1][x + 1] === 0) {
+      const newPos = { x: x + 2, y: y - 2, dir };
+      validatePos(board, newPos, stone) && empty.push(newPos);
+    }
+
+    if (end_x - 1 >= 0 && end_y + 1 < BOARD_SIZE && board[end_y + 1][end_x - 1] === 0) {
+      const newPos = { x: end_x - 2, y: end_y + 2, dir };
+      validatePos(board, newPos, stone) && empty.push(newPos);
+    }
+
+    return empty.map((coord) => Relocate.diagLeft(board, coord, stone));
   };
 
-  const emptyPositions = positions.map((pos) => ({ dir: pos.dir, empty: getEmptyPositions(pos) }));
-  console.log(emptyPositions);
+  return positions
+    .map((pos) => getPos(pos))
+    .map((emptyPos) => (!emptyPos.length ? [] : evaluateStone(board, emptyPos, stone)))
+    .map((evaluated, idx) => ({
+      ...positions[idx],
+      neighbors: evaluated,
+    }));
 };

@@ -35,10 +35,10 @@ const Main = () => {
 
   const handleBoardClick = (x, y, stoneType) => {
     const copied = [...board];
-    copied[y][x] = stoneType;
+    copied[y][x] = 1;
 
     setBoard(copied);
-    setClicked({ x, y, stone: stoneType });
+    setClicked({ x, y, stone: 1 });
   };
 
   const handleShowStats = () => {
