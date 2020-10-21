@@ -1,9 +1,11 @@
 import { BOARD_SIZE } from '@/const/Game';
+import { getOppStone } from '@/utils/BoardUtils';
 
 export const check = (board = [[]], last = {}) => {
   const startPos = relocateCursors(board, last);
   const countedStones = countStones(board, startPos, last.stone);
 
+  console.log(checkDefenses(board, countedStones, last.stone));
   return countedStones;
 };
 
@@ -95,4 +97,43 @@ const countStones = (board, startPos = [], stone) => {
     .filter((pos) => pos.cnt > 1);
 };
 
-const addDefended = (board, startPos = [], stone) => {};
+
+
+const checkDefenses = (board = [[]], positions = [], stone) => {
+  const checkDefense = ({ x, y, dir, end_x, end_y }) => {
+    let defenses = 0;
+    if (dir === DIRECTIONS.VERT) {
+      if (y === 0) defenses++;
+      else board[y - 1][x] === getOppStone(stone) && defenses++;
+
+      if (end_y + 1 >= BOARD_SIZE) defenses++;
+      else board[end_y + 1][end_x] === getOppStone(stone) && defenses++;
+      return defenses;
+    }
+    if (dir === DIRECTIONS.HORI) {
+      if (x === 0) defenses++;
+      else board[y][x - 1] === getOppStone(stone) && defenses++;
+
+      if (end_x + 1 >= BOARD_SIZE) defenses++;
+      else board[end_y][end_x + 1] === getOppStone(stone) && defenses++;
+      return defenses;
+    }
+
+    if (x === 0 && y === 0) defenses++;
+    else x - 1 >= 0 && y - 1 >= 0 && board[y - 1][x - 1] === getOppStone(stone) && defenses++;
+
+    if (end_x + 1 >= BOARD_SIZE && end_y + 1 >= BOARD_SIZE) defenses++;
+    else
+      end_x + 1 < BOARD_SIZE &&
+        end_y + 1 < BOARD_SIZE &&
+        board[end_y + 1][end_x + 1] === getOppStone(stone) &&
+        defenses++;
+
+    return defenses;
+  };
+
+  return positions.map((pos) => ({
+    ...pos,
+    defenses: checkDefense(pos),
+  }));
+};
