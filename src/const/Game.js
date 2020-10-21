@@ -5,4 +5,5 @@ export const DIRECTIONS = {
   VERT: 0,
   HORI: 1,
   DIAG: 2,
+  DIAG_LEFT: 3,
 };
