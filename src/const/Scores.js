@@ -16,6 +16,6 @@ export default {
   TWOONE: 7,
   TWOONE_DEFENDED: 6,
   TWOTWO: 4,
-  TWO: 2,
-  TWO_DEFENDED: 1, 
+  TWO: 3,
+  TWO_DEFENDED: 2, 
 };
