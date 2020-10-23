@@ -3,7 +3,8 @@ import Button from '@material-ui/core/Button';
 import Board from '@/components/GameBoard';
 import { makeStyles } from '@material-ui/core/styles';
 import { tempData } from '@/Board/data';
-import { check } from '@/Board/patterns';
+import check from '@/Board/patterns';
+import evaluate from '@/Board/evaluate';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -42,7 +43,10 @@ const Main = () => {
   };
 
   const handleShowStats = () => {
-    console.log(check(board, lastClicked));
+    const results = check(board, lastClicked);
+    const evaluated = evaluate(results);
+
+    console.log(evaluated);
   };
   return (
     <div className={classes.root}>

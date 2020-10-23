@@ -3,13 +3,12 @@ import checkDefense from './defense';
 import getNeighbors from './neighbors';
 import * as Relocate from './relocate';
 
-export const check = (board = [[]], last = {}) => {
+export default function check(board, last) {
   const startPos = relocateCursors(board, last, last.stone);
 
   const evaluatedStones = evaluateStone(board, startPos, last.stone);
-  const res = setNeighbors(board, evaluatedStones, last.stone);
-  console.log(res);
-};
+  return setNeighbors(board, evaluatedStones, last.stone);
+}
 
 const evaluateStone = (board, startPos, stone) => checkDefenses(board, countStones(board, startPos, stone), stone);
 
