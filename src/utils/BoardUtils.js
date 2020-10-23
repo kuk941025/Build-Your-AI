@@ -10,3 +10,26 @@ export const validatePos = (board, pos, stone) => {
   if (board[y][x] !== stone) return false;
   return true;
 };
+
+export const initBoardData = () =>
+  Array(BOARD_SIZE)
+    .fill(0)
+    .map((_) =>
+      Array(BOARD_SIZE)
+        .fill(0)
+        .map((__) => __)
+    );
+
+export const randomPlace = (board) => {
+  const rndNum = () => Math.floor(Math.random() * BOARD_SIZE);
+  while (true) {
+    const rndX = rndNum();
+    const rndY = rndNum();
+
+    if (board[rndY][rndX] === 0)
+      return {
+        x: rndX,
+        y: rndY,
+      };
+  }
+};

@@ -14,7 +14,7 @@ const omok = (result) => (result.cnt === 5 ? true : false);
 
 export default function evaluate(results = []) {
   if (results.find(omok)) return Scores.OMOK;
-  console.log(results);
+
   const removed = results.filter(removeDefense).filter(removeCntOne);
 
   if (findFourFour(removed)) return Scores.FOURFOUR;
@@ -52,7 +52,7 @@ export default function evaluate(results = []) {
   if (three) {
     if (three.defenses === 0) return Scores.THREE;
     if (three.defenses === 1) return Scores.THREE_DEFENDED;
-  } 
+  }
 
   const twoone = findTwoOne(results);
   if (twoone) {
@@ -123,4 +123,4 @@ const findTwoOne = (results) => results.find((result) => result.cnt + result.nei
 
 const findTwoTwo = (results) => (results.filter((result) => result.cnt === 2).length >= 2 ? true : false);
 
-const findTwo = results => results.find(result => result.cnt === 2);
+const findTwo = (results) => results.find((result) => result.cnt === 2);
