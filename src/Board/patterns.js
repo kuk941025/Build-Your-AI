@@ -10,7 +10,12 @@ export default function check(board, last) {
   return setNeighbors(board, evaluatedStones, last.stone);
 }
 
+export const checkOmok = (boards = [], stones = []) => {
+  return boards.map((board, idx) => {
+    const starts = stones[idx].map(stone => relocateCursors(board, stone, stone.stone));
 
+  })
+}
 
 const evaluateStone = (board, startPos, stone) => checkDefenses(board, countStones(board, startPos, stone), stone);
 

@@ -11,12 +11,8 @@ import { crossover, placeStones } from './DNA';
  * @returns {array} matingPools
  */
 
-export const naturalSelection = (boards, DNAs = []) => {
-  const { fitnesses = [] } = addFitness(boards, DNAs);
-
+export const naturalSelection = (_, DNAs = [], fitnesses) => {
   const matingPools = fitnesses.reduce((acc, cur, idx) => {
-    // const mappedFitness = map(cur, 0, maxFitness, 0, Scores.OMOK);
-
     return acc.concat(
       Array(cur)
         .fill(0)
@@ -52,27 +48,34 @@ export const generateGens = (matingPools = []) => {
     });
   }
 
-
   return {
     DNAs: newDNAs,
     updated,
   };
 };
 
-const addFitness = (boards, DNAs = []) => {
+export const calcFitness = (boards, DNAs = []) => {
   let maxFitness = 0;
 
   const fitnesses = DNAs.map((dna, idx) => {
     if (!dna.length) return 1;
 
-    const length = dna.length - 1;
-    const checked = check(boards[idx], dna[length]);
+    // const length = dna.length - 1;
+    // find highest score function
+    const highestScore = dna.reduce((acc, cur) => {
+      const checkedPositions = check(boards[idx], cur);
+      const score = evaluate(checkedPositions);
 
-    const evaluated = evaluate(checked);
-    if (evaluated > maxFitness) maxFitness = evaluated;
+      if (score > acc) return score;
+      return acc;
+    }, 0);
+    // const checked = check(boards[idx], dna[length]);
 
-    if (evaluated === 100) console.log('omok');
-    return evaluated;
+    // const evaluated = evaluate(checked);
+    if (highestScore > maxFitness) maxFitness = highestScore;
+
+    if (highestScore === 100) console.log('omok');
+    return highestScore;
   });
 
   return {
