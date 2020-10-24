@@ -1,6 +1,6 @@
 import evaluate from '@/Board/evaluate';
 import check from '@/Board/patterns';
-import { crossover, mutate, placeStones } from './DNA';
+import { crossover, placeStones } from './DNA';
 
 // import { map } from '@/utils/fitness';
 // import Scores from '@/const/Scores';
@@ -27,9 +27,13 @@ export const naturalSelection = (boards, DNAs = []) => {
   return matingPools;
 };
 
+// returns highest score
 export const generateGens = (matingPools = []) => {
   const newDNAs = [];
   const population = matingPools.length;
+  const updated = Array(population)
+    .fill(0)
+    .map((_) => []);
 
   for (let i = 0; i < population; i++) {
     const idxA = Math.floor(Math.random() * population);
@@ -37,16 +41,27 @@ export const generateGens = (matingPools = []) => {
     const dnaA = matingPools[idxA];
     const dnaB = matingPools[idxB];
 
-    const child = placeStones(mutate(crossover(dnaA, dnaB)));
-    newDNAs.push(child);
+    const child = crossover(dnaA, dnaB);
+    const placed = placeStones(child.DNAs);
+
+    newDNAs.push(placed);
+
+    updated[i].push(placed[placed.length - 1]);
+    child.genes.forEach((gene) => {
+      updated[i].push(gene);
+    });
   }
 
-  return newDNAs;
+
+  return {
+    DNAs: newDNAs,
+    updated,
+  };
 };
 
 const addFitness = (boards, DNAs = []) => {
   let maxFitness = 0;
-  console.log(boards);
+
   const fitnesses = DNAs.map((dna, idx) => {
     if (!dna.length) return 1;
 

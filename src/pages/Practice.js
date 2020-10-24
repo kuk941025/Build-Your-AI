@@ -17,7 +17,9 @@ const handleClick = () => {
   // placeStone();
   // evaluateBoard();
   const matingPools = naturalSelection(boards, DNAs);
-  DNAs = generateGens(matingPools);
+  const newGens = generateGens(matingPools);
+  DNAs = newGens.DNAs;
+
   boards = createBoards(DNAs);
 
   console.log(DNAs, boards);

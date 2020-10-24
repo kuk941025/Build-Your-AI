@@ -10,15 +10,27 @@ export const crossover = (dnaA, dnaB) => {
   return mutate(newDNA);
 };
 
-export const mutate = (DNAs, rate = 0.05) => {
-  return DNAs.map((dna) => {
-    if (Math.random() < rate)
+const mutate = (DNAs, rate = 0.05) => {
+  const genes = []
+
+
+  const mutatedDNAs = DNAs.map((dna) => {
+    if (Math.random() < rate) {
+      const rndCoords = placeRandom(DNAs);
+      genes.push({ ...rndCoords, stone: BLACK_STONE });
+
       return {
-        ...placeRandom(DNAs),
+        ...rndCoords,
         stone: BLACK_STONE,
       };
+    }
     return dna;
   });
+
+  return {
+    DNAs: mutatedDNAs,
+    genes,
+  };
 };
 
 export const placeStones = (DNAs) => {
