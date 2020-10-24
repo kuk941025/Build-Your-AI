@@ -69,7 +69,7 @@ export default function evaluate(results = []) {
     if (two.defenses === 1) return Scores.TWO_DEFENDED;
   }
 
-  return 0;
+  return Scores.DEFAULT;
 }
 
 const findFourFour = (results = []) => (results.filter((result) => result.cnt === 4).length >= 2 ? true : false);

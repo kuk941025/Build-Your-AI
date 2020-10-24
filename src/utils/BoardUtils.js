@@ -1,3 +1,4 @@
+import { initBoards } from '@/Board/init';
 import { BLACK_STONE, WHITE_STONE, BOARD_SIZE } from '@/const/Game';
 
 export const getCoord = ({ mouseCoord, boxCoord, boxSize, pad }) => Math.round((mouseCoord - boxCoord - pad) / boxSize);
@@ -32,4 +33,16 @@ export const randomPlace = (board) => {
         y: rndY,
       };
   }
+};
+
+// dirty write on boards for efficiency
+export const createBoards = (DNAs = []) => {
+  const boards = initBoards(DNAs.length);
+  DNAs.forEach((DNA, idx) => {
+    DNA.forEach(({ x, y, stone }) => {
+      boards[idx][y][x] = stone;
+    });
+  });
+
+  return boards;
 };

@@ -1,10 +1,11 @@
 import React from 'react';
-import { randomPlace } from '@/utils/BoardUtils';
+import { randomPlace, createBoards } from '@/utils/BoardUtils';
 import { initBoards, initDNAs } from '@/Board/init';
 import { BLACK_STONE } from '@/const/Game';
 import Button from '@material-ui/core/Button';
 import check from '@/Board/patterns';
 import evaluate from '@/Board/evaluate';
+import { naturalSelection, generateGens } from '@/genetics/population';
 
 let boards = initBoards(10);
 let DNAs = initDNAs(10);
@@ -13,8 +14,13 @@ const handleClick = () => {
   let gen = 1;
 
   console.log(gen++);
-  placeStone();
-  evaluateBoard();
+  // placeStone();
+  // evaluateBoard();
+  const matingPools = naturalSelection(boards, DNAs);
+  DNAs = generateGens(matingPools);
+  boards = createBoards(DNAs);
+
+  console.log(DNAs, boards);
 };
 
 const evaluateBoard = () => {

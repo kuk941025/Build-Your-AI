@@ -10,6 +10,8 @@ export default function check(board, last) {
   return setNeighbors(board, evaluatedStones, last.stone);
 }
 
+
+
 const evaluateStone = (board, startPos, stone) => checkDefenses(board, countStones(board, startPos, stone), stone);
 
 const relocateCursors = (board = [[]], pos = { x: 0, y: 0 }, stone) => {
