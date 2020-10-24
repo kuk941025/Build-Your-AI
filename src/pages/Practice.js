@@ -1,48 +1,44 @@
 import React from 'react';
-import { initBoardData, randomPlace } from '@/utils/BoardUtils';
+import { randomPlace } from '@/utils/BoardUtils';
+import { initBoards, initDNAs } from '@/Board/init';
 import { BLACK_STONE } from '@/const/Game';
 import Button from '@material-ui/core/Button';
 import check from '@/Board/patterns';
 import evaluate from '@/Board/evaluate';
 
-let boards = [];
-let lastPlaced = [];
-
-//init Boards
-Array(10)
-  .fill(0)
-  .forEach((_) => boards.push(initBoardData()));
+let boards = initBoards(10);
+let DNAs = initDNAs(10);
 
 const handleClick = () => {
+  let gen = 1;
+
+  console.log(gen++);
   placeStone();
-  evaluateBoard()
+  evaluateBoard();
 };
 
 const evaluateBoard = () => {
   boards.forEach((board, idx) => {
-    const result = check(board, lastPlaced[idx]);
-    console.log(board);
-    console.log(evaluate(result));
-  })
-}
+    const length = DNAs[idx].length - 1;
+    const result = check(board, DNAs[idx][length]);
+
+    evaluate(result);
+  });
+};
 const placeStone = () => {
-  lastPlaced = [];
-  boards = boards.map((board) => {
+  boards = boards.map((board, idx) => {
     const { x, y } = randomPlace(board);
 
-    lastPlaced.push({ x, y, stone: BLACK_STONE });
+    DNAs[idx].push({ x, y, stone: BLACK_STONE });
     board[y][x] = BLACK_STONE;
     return board;
   });
 };
 
-const test = (setFunc) => {
-  setFunc(false);
-};
 const Practice = () => {
   return (
     <div>
-      <Button variant="contained" onClick={() => test(handleClick)}>
+      <Button variant="contained" onClick={handleClick}>
         Click
       </Button>
     </div>
