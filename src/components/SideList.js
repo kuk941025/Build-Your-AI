@@ -16,10 +16,9 @@ const SideList = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  
   return (
     <List>
-      <ListItem className={classes.listItem} button>
+      <ListItem onClick={() => history.push('/p')} className={classes.listItem} button>
         Play
       </ListItem>
       <ListItem onClick={() => history.push('/o')} className={classes.listItem} button>

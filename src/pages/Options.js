@@ -2,27 +2,49 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@/components/Accordion';
 import OptionText from '@/components/OptionText';
+import Button from '@material-ui/core/Button';
+import defaultScores, { updateScores } from '@/const/Scores';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  optionRoot: {
     width: '100%',
+  },
+  btnRoot: {
     display: 'flex',
-  },
-  inputText: {
-    flexBasis: '30%',
-    flexShrink: 0,
-  },
-  input: {
-    flex: 1,
+    justifyContent: 'flex-end',
+    padding: theme.spacing(1),
   },
 }));
 const Options = () => {
-  const [expanded, setExpanded] = useState(false);
   const classes = useStyles();
+  const [scores, setScores] = useState(defaultScores);
+  const [expanded, setExpanded] = useState(true);
+
+  const handleChange = (type) => (value) => {
+    setScores({
+      ...scores,
+      [type]: Number(value),
+    });
+  };
+
   return (
     <div>
-      <Accordion summary="te" title="title" expanded={expanded} onClick={() => setExpanded((prev) => !prev)}>
-        <OptionText />
+      <Accordion
+        title="scores"
+        summary="cutomize score based on stone states"
+        expanded={expanded}
+        onClick={() => setExpanded((prev) => !prev)}>
+        <div className={classes.optionRoot}>
+          {Object.keys(scores).map((type, idx) => (
+            <OptionText handleChange={handleChange(type)} text={type} value={scores[type]} key={idx} />
+          ))}
+
+          <div className={classes.btnRoot}>
+            <Button color="primary" onClick={() => updateScores(scores)} variant="contained">
+              Apply
+            </Button>
+          </div>
+        </div>
       </Accordion>
     </div>
   );

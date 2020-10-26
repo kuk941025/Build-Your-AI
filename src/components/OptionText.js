@@ -7,22 +7,31 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     width: '100%',
+    alignItems: 'center',
+    padding: theme.spacing(1),
   },
   inputText: {
-    flexBasis: '30%',
+    flexBasis: '45%',
     flexShrink: 0,
+    fontSize: '0.9rem',
+    textAlign: 'left',
   },
   input: {
     flex: 1,
   },
 }));
-const OptionText = () => {
+const OptionText = ({ text = '', value, handleChange }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.inputText}>Text</Typography>
-      <TextField className={classes.input} />
+      <Typography className={classes.inputText}>{text}</Typography>
+      <TextField
+        type="number"
+        onChange={({ target: { value } }) => handleChange(value)}
+        defaultValue={value}
+        className={classes.input}
+      />
     </div>
   );
 };
