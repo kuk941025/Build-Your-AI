@@ -20,3 +20,26 @@ export default {
   TWO_DEFENDED: 5, 
   DEFAULT: 1, 
 };
+
+export const SCORE_TYPES = {
+  OMOK: 'omok',
+  FOURFOUR: 'fourfour',
+  THREEFOUR: 'threefour',
+  THREEFOUR_DEFENDED: 'threefour_defended',
+  FOUR: 'four',
+  FOUR_DEFENDED: 'four_defended',
+  ONETHREE: 'onethree',
+  ONETHREE_DEFENDED: 'onethree_defended',
+  ONETHREE_SIDE_DEFENDED: 'onethree_side_defended',
+  THREETHREE: 'threethree',
+  THREETHREE_DEFENDED: 'threethree_defended', 
+  THREETWO: 'twotwo',
+  THREE: 'three',
+  THREE_DEFENDED: 'three_defended',  
+  TWOONE: 'twoone',
+  TWOONE_DEFENDED: 'twoone_defended',
+  TWOTWO: 'twotwo',
+  TWO: 'two',
+  TWO_DEFENDED: 'two_defended', 
+  DEFAULT: 'default', 
+}
