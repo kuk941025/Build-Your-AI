@@ -24,6 +24,7 @@ export const naturalSelection = (_, DNAs = [], fitnesses) => {
     }, [])
     .slice(0, Genetics.LIMIT_POPULATION);
 
+
   return matingPools;
 };
 
@@ -42,6 +43,7 @@ export const generateGens = (matingPools = []) => {
     const dnaB = matingPools[idxB];
 
     const child = crossover(dnaA, dnaB);
+    
     const placed = placeStones(child.DNAs);
 
     newDNAs.push(placed);
@@ -80,14 +82,19 @@ export const calcFitness = (boards, DNAs = []) => {
     if (highestScore === Scores.OMOK) omok++;
 
     sum += highestScore;
-    return highestScore;
+
+    return {
+      score: highestScore,
+      board: boards[idx],
+    };
   });
 
   return {
-    fitnesses,
+    fitnesses: fitnesses.map(f => f.score),
     maxFitness,
     population: DNAs.length,
     avgScore: Math.floor(sum / DNAs.length),
     omok,
+    topTen: fitnesses.sort((a, b) => b.score - a.score).slice(0, 10),
   };
 };

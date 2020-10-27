@@ -14,7 +14,7 @@ const drawLines = ({ ctx, boxSize, pad }) => {
   }
 };
 
-const Board = ({ size = 600, onClick = null, board }) => {
+const Board = ({ size = 600, onClick = null, board, refresh = true }) => {
   const canv = useRef(null);
   const stoneType = useRef(1);
   const blackStone = useRef(convert2Img(BlackStoneImg));
@@ -29,7 +29,6 @@ const Board = ({ size = 600, onClick = null, board }) => {
     const rect = canv.current.getBoundingClientRect();
     const x = getCoord({ mouseCoord: e.clientX, boxCoord: rect.left, pad, boxSize });
     const y = getCoord({ mouseCoord: e.clientY, boxCoord: rect.top, pad, boxSize });
-
 
     if (x < 0 || y < 0) return;
     if (x >= BOARD_SIZE || y >= BOARD_SIZE) return;
@@ -62,17 +61,36 @@ const Board = ({ size = 600, onClick = null, board }) => {
       drawLines({ ctx, boxSize, pad });
       setLoaded(true);
     };
-  }, [boxSize, pad, size]);
+  }, []);
 
   useEffect(() => {
     if (!loaded) return;
+
+    if (refresh) {
+      const ctx = canv.current.getContext('2d');
+      ctx.canvas.width = boxSize * BOARD_SIZE + pad * 2;
+      ctx.canvas.height = boxSize * BOARD_SIZE + pad * 2;
+
+      const boardImg = convert2Img(BoardImg);
+      boardImg.onload = () => {
+        ctx.drawImage(boardImg, 0, 0, size, size);
+        drawLines({ ctx, boxSize, pad });
+        setLoaded(true);
+        board.forEach((row, y) => {
+          row.forEach((stoneType, x) => {
+            if (stoneType > 0) placeStone(stoneType, x, y);
+          });
+        });
+      };
+      return;
+    }
 
     board.forEach((row, y) => {
       row.forEach((stoneType, x) => {
         if (stoneType > 0) placeStone(stoneType, x, y);
       });
     });
-  }, [board, loaded, placeStone]);
+  }, [board, loaded, refresh, placeStone]);
 
   return <canvas ref={canv} onClick={handleOnClick} />;
 };

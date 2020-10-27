@@ -12,7 +12,7 @@ const createInitInfo = () => ({
   population: 0,
   avgScore: 0,
   mutationRate: Genetics.MUTATION_RATE,
-  limit: Genetics.LIMIT_POPULATION,
+  limit: Genetics.LIMIT_POPULATION, 
 });
 
 const useStyles = makeStyles(() => ({
@@ -29,9 +29,7 @@ const Practice = () => {
   const handleRun = () => {
     const result = run();
 
-    const topTen = result.fitnesses.sort((a, b) => b - a).slice(0, 10);
-    setTopTen(topTen);
-
+    setTopTen(result.topTen);
     setInfo({
       ...info,
       generation: info.generation + 1,
@@ -49,7 +47,7 @@ const Practice = () => {
         </Button>
       </div>
 
-      <TopTen scores={topTen} />
+      <TopTen data={topTen} />
     </div>
   );
 };

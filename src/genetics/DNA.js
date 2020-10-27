@@ -34,6 +34,7 @@ const mutate = (DNAs, rate = GENETICS.MUTATION_RATE) => {
 };
 
 export const placeStones = (DNAs) => {
+  if (DNAs.length >= 10) return DNAs;
   return DNAs.concat({
     ...placeRandom(DNAs),
     stone: BLACK_STONE,

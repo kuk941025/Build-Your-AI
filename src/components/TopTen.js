@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Board from '@/components/GameBoard';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,16 +10,32 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 'bold',
   },
+  boardWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
 }));
-const TopTen = ({ scores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }) => {
+const TopTen = ({ data = [] }) => {
   const classes = useStyles();
+
+  if (!data.length) return null;
   return (
     <div className={classes.root}>
       <Typography gutterBottom className={classes.title} variant="h6">
         Top Ten
       </Typography>
 
-      <Typography variant="body1">{scores.join(', ')}</Typography>
+      <Typography gutterBottom variant="body1">
+        {data.map((item) => item.score).join(', ')}
+      </Typography>
+
+      <div className={classes.boardWrapper}>
+        {data.map((item, idx) => (
+          <Board key={idx} size={300} board={item.board} />
+        ))}
+      </div>
     </div>
   );
 };
