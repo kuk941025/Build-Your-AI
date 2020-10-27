@@ -1,38 +1,48 @@
-import React from 'react';
-import { createBoards } from '@/utils/BoardUtils';
-import { initBoards, initDNAs, initFitness } from '@/Board/init';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { naturalSelection, generateGens, calcFitness } from '@/genetics/population';
 import DisplayInfo from '@/components/DisplayInfo';
+import run from '@/genetics';
 
+const createInitInfo = (population = 1000, mutationRate = 0.05) => ({
+  generation: 1,
+  bestScore: 0,
+  population,
+  avgScore: 0,
+  mutationRate,
+});
 
-let boards = initBoards(10);
-let DNAs = initDNAs(10);
-let fitnesses = initFitness(10);
-let gen = 1;
-const handleClick = () => {
-  console.log(gen++);
-
-  const matingPools = naturalSelection(boards, DNAs, fitnesses);
-  const newGens = generateGens(matingPools);
-
-  boards = createBoards(newGens.DNAs);
-  const calculated = calcFitness(boards, newGens.updated);
-
-  // if there exist fitness === 100, exit.
-  DNAs = newGens.DNAs;
-  fitnesses = calculated.fitnesses;
-
-  console.log(calculated.maxFitness);
-};
+const useStyles = makeStyles(() => ({
+  btnRoot: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+}));
 
 const Practice = () => {
+  const classes = useStyles();
+  const [info, setInfo] = useState(createInitInfo());
+
+  const handleRun = () => {
+    const result = run();
+    console.log(result);
+
+    setInfo({
+      ...info,
+      generation: info.generation + 1,
+      bestScore: result.maxFitness,
+      population: result.population,
+      avgScore: result.avgScore,
+    });
+  };
   return (
     <div>
-      <DisplayInfo />
-      <Button variant="contained" onClick={handleClick}>
-        Click
-      </Button>
+      <DisplayInfo info={info} />
+      <div className={classes.btnRoot}>
+        <Button variant="contained" color="primary" onClick={handleRun}>
+          Run
+        </Button>
+      </div>
     </div>
   );
 };

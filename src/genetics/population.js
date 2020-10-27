@@ -1,6 +1,7 @@
 import evaluate from '@/Board/evaluate';
 import check from '@/Board/patterns';
 import { crossover, placeStones } from './DNA';
+import Scores from '@/configs/Scores';
 
 // import { map } from '@/utils/fitness';
 // import Scores from '@/const/Scores';
@@ -56,12 +57,11 @@ export const generateGens = (matingPools = []) => {
 
 export const calcFitness = (boards, DNAs = []) => {
   let maxFitness = 0;
-
+  let sum = 0;
+  let omok = 0;
   const fitnesses = DNAs.map((dna, idx) => {
     if (!dna.length) return 1;
-
-    // const length = dna.length - 1;
-    // find highest score function
+    // highest score equals to a score of dna
     const highestScore = dna.reduce((acc, cur) => {
       const checkedPositions = check(boards[idx], cur);
       const score = evaluate(checkedPositions);
@@ -69,17 +69,20 @@ export const calcFitness = (boards, DNAs = []) => {
       if (score > acc) return score;
       return acc;
     }, 0);
-    // const checked = check(boards[idx], dna[length]);
 
-    // const evaluated = evaluate(checked);
     if (highestScore > maxFitness) maxFitness = highestScore;
 
-    if (highestScore === 100) console.log('omok');
+    if (highestScore === Scores.OMOK) omok++;
+
+    sum += highestScore;
     return highestScore;
   });
 
   return {
     fitnesses,
     maxFitness,
+    population: DNAs.length,
+    avgScore: Math.floor(sum / DNAs.length),
+    omok,
   };
 };

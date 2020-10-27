@@ -19,21 +19,22 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
 }));
-const DisplayInfo = (props) => {
-  const { generations = 1, populations = 1, best_score = 1, avg_score = 1, mutation_rate = 0.01 } = props;
+const DisplayInfo = ({info}) => {
+  console.log(info);
+  const { generation = 1, population = 1, bestScore = 1, avgScore = 1, mutationRate = 0.01 } = info;
   const classes = useStyles();
   return (
     <div className={classes.infoWrapper}>
-      <Typography className={classes.text}>Generations</Typography>
-      <Typography className={classes.value}>{generations}</Typography>
-      <Typography className={classes.text}>Populations</Typography>
-      <Typography className={classes.value}>{populations}</Typography>
+      <Typography className={classes.text}>generation</Typography>
+      <Typography className={classes.value}>{generation}</Typography>
+      <Typography className={classes.text}>population</Typography>
+      <Typography className={classes.value}>{population}</Typography>
       <Typography className={classes.text}>Best Score</Typography>
-      <Typography className={classes.value}>{best_score}</Typography>
+      <Typography className={classes.value}>{bestScore}</Typography>
       <Typography className={classes.text}>Average Score</Typography>
-      <Typography className={classes.value}>{avg_score}</Typography>
+      <Typography className={classes.value}>{avgScore}</Typography>
       <Typography className={classes.text}>Mutation Rate</Typography>
-      <Typography className={classes.value}>{mutation_rate}</Typography>
+      <Typography className={classes.value}>{mutationRate}</Typography>
     </div>
   );
 };
