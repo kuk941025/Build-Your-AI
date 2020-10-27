@@ -18,7 +18,10 @@ const useStyles = makeStyles((theme) => ({
 const Options = () => {
   const classes = useStyles();
   const [scores, setScores] = useState(defaultScores);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState({
+    option: false,
+    genetics: false,
+  });
 
   const handleChange = (type) => (value) => {
     setScores({
@@ -27,23 +30,30 @@ const Options = () => {
     });
   };
 
+  const scoreOption = () =>
+    Object.keys(scores).map((type, idx) => (
+      <OptionText handleChange={handleChange(type)} text={type} value={scores[type]} key={idx} />
+    ));
+
   return (
     <div>
       <Accordion
         title="scores"
-        summary="cutomize score based on stone states"
-        expanded={expanded}
-        onClick={() => setExpanded((prev) => !prev)}>
-        <div className={classes.optionRoot}>
-          {Object.keys(scores).map((type, idx) => (
-            <OptionText handleChange={handleChange(type)} text={type} value={scores[type]} key={idx} />
-          ))}
+        summary="customize score based on stone states"
+        expanded={expanded.option}
+        onSubmit={() => updateScores(scores)}
+        onExapnd={() => setExpanded((prev) => ({ ...prev, option: !prev.option }))}>
+        <div className={classes.optionRoot}>{scoreOption()}</div>
+      </Accordion>
 
-          <div className={classes.btnRoot}>
-            <Button color="primary" onClick={() => updateScores(scores)} variant="contained">
-              Apply
-            </Button>
-          </div>
+      <Accordion
+        title="genetics"
+        summary="customize genetic related options"
+        onExapnd={() => setExpanded((prev) => ({ ...prev, genetics: !prev.genetics }))}
+        expanded={expanded.genetics}>
+        <div className={classes.optionRoot}>
+          <OptionText text="Mutation Rate" value={0.05} />
+          <OptionText text="Limit Population" value={10000} />
         </div>
       </Accordion>
     </div>
