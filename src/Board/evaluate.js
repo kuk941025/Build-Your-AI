@@ -1,4 +1,4 @@
-import Scores from '@/const/Scores';
+import Scores from '@/configs/Scores';
 
 const removeDefense = (result) => (result.defenses !== 2 ? true : false);
 const removeCntOne = (result) => {

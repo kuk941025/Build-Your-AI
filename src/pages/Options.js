@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@/components/Accordion';
 import OptionText from '@/components/OptionText';
 import Button from '@material-ui/core/Button';
-import defaultScores, { updateScores } from '@/const/Scores';
+import defaultScores, { updateScores } from '@/configs/Scores';
 
 const useStyles = makeStyles((theme) => ({
   optionRoot: {

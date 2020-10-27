@@ -3,6 +3,8 @@ import { createBoards } from '@/utils/BoardUtils';
 import { initBoards, initDNAs, initFitness } from '@/Board/init';
 import Button from '@material-ui/core/Button';
 import { naturalSelection, generateGens, calcFitness } from '@/genetics/population';
+import DisplayInfo from '@/components/DisplayInfo';
+
 
 let boards = initBoards(10);
 let DNAs = initDNAs(10);
@@ -27,6 +29,7 @@ const handleClick = () => {
 const Practice = () => {
   return (
     <div>
+      <DisplayInfo />
       <Button variant="contained" onClick={handleClick}>
         Click
       </Button>

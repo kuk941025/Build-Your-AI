@@ -1,4 +1,4 @@
-import SCORES from '@/const/Scores';
+import SCORES from '@/configs/Scores';
 
 const score = (state = SCORES, actions = {}) => {
   switch (actions.type) {
