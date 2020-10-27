@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DisplayInfo from '@/components/DisplayInfo';
+import TopTen from '@/components/TopTen';
 import run from '@/genetics';
 
 const createInitInfo = (population = 1000, mutationRate = 0.05) => ({
@@ -22,10 +23,12 @@ const useStyles = makeStyles(() => ({
 const Practice = () => {
   const classes = useStyles();
   const [info, setInfo] = useState(createInitInfo());
-
+  const [topTen, setTopTen] = useState([]);
   const handleRun = () => {
     const result = run();
-    console.log(result);
+    
+    const topTen = result.fitnesses.sort((a, b) => b - a).slice(0, 10);
+    setTopTen(topTen);
 
     setInfo({
       ...info,
@@ -43,6 +46,8 @@ const Practice = () => {
           Run
         </Button>
       </div>
+
+      <TopTen scores={topTen}/>
     </div>
   );
 };
