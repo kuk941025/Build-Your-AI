@@ -4,13 +4,15 @@ import Button from '@material-ui/core/Button';
 import DisplayInfo from '@/components/DisplayInfo';
 import TopTen from '@/components/TopTen';
 import run from '@/genetics';
+import Genetics from '@/configs/Genetics';
 
-const createInitInfo = (population = 1000, mutationRate = 0.05) => ({
+const createInitInfo = () => ({
   generation: 1,
   bestScore: 0,
-  population,
+  population: 0,
   avgScore: 0,
-  mutationRate,
+  mutationRate: Genetics.MUTATION_RATE,
+  limit: Genetics.LIMIT_POPULATION,
 });
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +28,7 @@ const Practice = () => {
   const [topTen, setTopTen] = useState([]);
   const handleRun = () => {
     const result = run();
-    
+
     const topTen = result.fitnesses.sort((a, b) => b - a).slice(0, 10);
     setTopTen(topTen);
 
@@ -47,7 +49,7 @@ const Practice = () => {
         </Button>
       </div>
 
-      <TopTen scores={topTen}/>
+      <TopTen scores={topTen} />
     </div>
   );
 };

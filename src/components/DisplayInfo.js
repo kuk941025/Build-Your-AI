@@ -20,8 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const DisplayInfo = ({info}) => {
-  console.log(info);
-  const { generation = 1, population = 1, bestScore = 1, avgScore = 1, mutationRate = 0.01 } = info;
+  const { generation = 1, population = 1, bestScore = 1, avgScore = 1, mutationRate = 0.01, limit = 1000 } = info;
   const classes = useStyles();
   return (
     <div className={classes.infoWrapper}>
@@ -35,6 +34,8 @@ const DisplayInfo = ({info}) => {
       <Typography className={classes.value}>{avgScore}</Typography>
       <Typography className={classes.text}>Mutation Rate</Typography>
       <Typography className={classes.value}>{mutationRate}</Typography>
+      <Typography className={classes.text}>Population limit</Typography>
+      <Typography className={classes.value}>{limit}</Typography>
     </div>
   );
 };

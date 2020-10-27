@@ -44,7 +44,7 @@ const CustomAccordion = ({ expanded, onExapnd, onSubmit, title = '', summary = '
           {children}
 
           <div className={classes.btnRoot}>
-            <Button onSubmit={onSubmit} color="primary" variant="contained">
+            <Button onClick={onSubmit} color="primary" variant="contained">
               Apply
             </Button>
           </div>

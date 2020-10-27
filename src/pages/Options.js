@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@/components/Accordion';
 import OptionText from '@/components/OptionText';
-import Button from '@material-ui/core/Button';
 import defaultScores, { updateScores } from '@/configs/Scores';
+import defaultGenetics, { updateGenetics, GENETIC_TYPES } from '@/configs/Genetics';
 
 const useStyles = makeStyles((theme) => ({
   optionRoot: {
@@ -18,21 +18,28 @@ const useStyles = makeStyles((theme) => ({
 const Options = () => {
   const classes = useStyles();
   const [scores, setScores] = useState(defaultScores);
+  const [genetics, setGenetics] = useState(defaultGenetics);
   const [expanded, setExpanded] = useState({
     option: false,
     genetics: false,
   });
 
-  const handleChange = (type) => (value) => {
+  const handleScore = (type) => (value) => {
     setScores({
       ...scores,
+      [type]: Number(value),
+    });
+  };
+  const handleGenetics = (type) => (value) => {
+    setGenetics({
+      ...genetics,
       [type]: Number(value),
     });
   };
 
   const scoreOption = () =>
     Object.keys(scores).map((type, idx) => (
-      <OptionText handleChange={handleChange(type)} text={type} value={scores[type]} key={idx} />
+      <OptionText handleChange={handleScore(type)} text={type} value={scores[type]} key={idx} />
     ));
 
   return (
@@ -49,11 +56,20 @@ const Options = () => {
       <Accordion
         title="genetics"
         summary="customize genetic related options"
-        onExapnd={() => setExpanded((prev) => ({ ...prev, genetics: !prev.genetics }))}
-        expanded={expanded.genetics}>
+        expanded={expanded.genetics}
+        onSubmit={() => updateGenetics(genetics)}
+        onExapnd={() => setExpanded((prev) => ({ ...prev, genetics: !prev.genetics }))}>
         <div className={classes.optionRoot}>
-          <OptionText text="Mutation Rate" value={0.05} />
-          <OptionText text="Limit Population" value={10000} />
+          <OptionText
+            handleChange={handleGenetics(GENETIC_TYPES.MUTATION_RATE)}
+            text="Mutation Rate"
+            value={genetics.MUTATION_RATE}
+          />
+          <OptionText
+            handleChange={handleGenetics(GENETIC_TYPES.LIMIT_POPULATION)}
+            text="Limit Population"
+            value={genetics.LIMIT_POPULATION}
+          />
         </div>
       </Accordion>
     </div>

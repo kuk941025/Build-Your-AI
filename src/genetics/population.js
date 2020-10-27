@@ -2,7 +2,7 @@ import evaluate from '@/Board/evaluate';
 import check from '@/Board/patterns';
 import { crossover, placeStones } from './DNA';
 import Scores from '@/configs/Scores';
-
+import Genetics from '@/configs/Genetics';
 // import { map } from '@/utils/fitness';
 // import Scores from '@/const/Scores';
 //natural selection
@@ -13,13 +13,16 @@ import Scores from '@/configs/Scores';
  */
 
 export const naturalSelection = (_, DNAs = [], fitnesses) => {
-  const matingPools = fitnesses.reduce((acc, cur, idx) => {
-    return acc.concat(
-      Array(cur)
-        .fill(0)
-        .map((_) => DNAs[idx])
-    );
-  }, []);
+  const matingPools = fitnesses
+    .sort((a, b) => b - a)
+    .reduce((acc, cur, idx) => {
+      return acc.concat(
+        Array(cur)
+          .fill(0)
+          .map((_) => DNAs[idx])
+      );
+    }, [])
+    .slice(0, Genetics.LIMIT_POPULATION);
 
   return matingPools;
 };
@@ -59,8 +62,10 @@ export const calcFitness = (boards, DNAs = []) => {
   let maxFitness = 0;
   let sum = 0;
   let omok = 0;
+
   const fitnesses = DNAs.map((dna, idx) => {
     if (!dna.length) return 1;
+
     // highest score equals to a score of dna
     const highestScore = dna.reduce((acc, cur) => {
       const checkedPositions = check(boards[idx], cur);
