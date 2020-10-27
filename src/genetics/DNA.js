@@ -1,5 +1,5 @@
 import { BLACK_STONE, BOARD_SIZE } from '@/const/Game';
-import GENETICS from '@/configs/Genetics';
+import DefaultGenetics from '@/configs/Genetics';
 
 export const crossover = (dnaA, dnaB) => {
   const rndIdx = Math.floor(Math.random() * dnaA.length);
@@ -11,7 +11,7 @@ export const crossover = (dnaA, dnaB) => {
   return mutate(newDNA);
 };
 
-const mutate = (DNAs, rate = GENETICS.MUTATION_RATE) => {
+const mutate = (DNAs, rate = DefaultGenetics.MUTATION_RATE) => {
   const genes = [];
 
   const mutatedDNAs = DNAs.map((dna) => {
@@ -34,7 +34,7 @@ const mutate = (DNAs, rate = GENETICS.MUTATION_RATE) => {
 };
 
 export const placeStones = (DNAs) => {
-  if (DNAs.length >= 10) return DNAs;
+  if (DNAs.length >= DefaultGenetics.MAX_DNA_SIZE) return DNAs;
   return DNAs.concat({
     ...placeRandom(DNAs),
     stone: BLACK_STONE,

@@ -6,15 +6,6 @@ import TopTen from '@/components/TopTen';
 import run from '@/genetics';
 import Genetics from '@/configs/Genetics';
 
-const createInitInfo = () => ({
-  generation: 1,
-  bestScore: 0,
-  population: 0,
-  avgScore: 0,
-  mutationRate: Genetics.MUTATION_RATE,
-  limit: Genetics.LIMIT_POPULATION, 
-});
-
 const useStyles = makeStyles(() => ({
   btnRoot: {
     display: 'flex',
@@ -22,17 +13,44 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const statsNames = {
+  generation: 'Generation',
+  population: 'Population',
+  bestScore: 'Best Score',
+  avgScore: 'Average Score',
+};
+const initStats = {
+  generation: 1,
+  population: 0,
+  bestScore: 0,
+  avgScore: 0,
+};
+
+const settingNames = {
+  mutationRate: 'Mutation Rate',
+  limit: 'Population Limit',
+  initPopulation: 'Initial Population Size',
+  maxDNA: 'Max. number of Stones',
+};
+const initSettings = {
+  mutationRate: Genetics.MUTATION_RATE,
+  limit: Genetics.LIMIT_POPULATION,
+  initPopulation: Genetics.INIT_POPULATION,
+  maxDNA: Genetics.MAX_DNA_SIZE,
+};
+
 const Practice = () => {
   const classes = useStyles();
-  const [info, setInfo] = useState(createInitInfo());
+  const [stats, setStats] = useState(initStats);
+  const [settings, setSettings] = useState(initSettings);
   const [topTen, setTopTen] = useState([]);
+
   const handleRun = () => {
     const result = run();
 
     setTopTen(result.topTen);
-    setInfo({
-      ...info,
-      generation: info.generation + 1,
+    setStats({
+      generation: stats.generation + 1,
       bestScore: result.maxFitness,
       population: result.population,
       avgScore: result.avgScore,
@@ -40,7 +58,8 @@ const Practice = () => {
   };
   return (
     <div>
-      <DisplayInfo info={info} />
+      <DisplayInfo title="Stats" names={statsNames} data={stats} />
+      <DisplayInfo title="Settings" names={settingNames} data={settings} />
       <div className={classes.btnRoot}>
         <Button variant="contained" color="primary" onClick={handleRun}>
           Run

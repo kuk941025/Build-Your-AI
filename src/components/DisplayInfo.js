@@ -22,16 +22,22 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
   },
 }));
-const DisplayInfo = ({ info }) => {
-  const { generation = 1, population = 1, bestScore = 1, avgScore = 1, mutationRate = 0.01, limit = 1000 } = info;
+const DisplayInfo = ({ data, names, title }) => {
   const classes = useStyles();
+
   return (
     <div>
       <Typography gutterBottom className={classes.title} variant="h6">
-        Settings
+        {title}
       </Typography>
       <div className={classes.infoWrapper}>
-        <Typography className={classes.text}>generation</Typography>
+        {Object.keys(data).map((key, idx) => (
+          <React.Fragment key={idx}>
+            <Typography className={classes.text}>{names[key]}</Typography>
+            <Typography className={classes.value}>{data[key]}</Typography>
+          </React.Fragment>
+        ))}
+        {/* <Typography className={classes.text}>generation</Typography>
         <Typography className={classes.value}>{generation}</Typography>
         <Typography className={classes.text}>population</Typography>
         <Typography className={classes.value}>{population}</Typography>
@@ -42,7 +48,7 @@ const DisplayInfo = ({ info }) => {
         <Typography className={classes.text}>Mutation Rate</Typography>
         <Typography className={classes.value}>{mutationRate}</Typography>
         <Typography className={classes.text}>Population limit</Typography>
-        <Typography className={classes.value}>{limit}</Typography>
+        <Typography className={classes.value}>{limit}</Typography> */}
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import { initBoards, initDNAs, initFitness } from '@/Board/init';
 import { createBoards } from '@/utils/BoardUtils';
 import { naturalSelection, generateGens, calcFitness } from '@/genetics/population';
+import DefaultGenetics from '@/configs/Genetics';
 
-let boards = initBoards(10);
-let DNAs = initDNAs(10);
-let fitnesses = initFitness(10);
+let boards = initBoards(DefaultGenetics.INIT_POPULATION);
+let DNAs = initDNAs(DefaultGenetics.INIT_POPULATION);
+let fitnesses = initFitness(DefaultGenetics.INIT_POPULATION);
 
 export default function run () {
   const matingPools = naturalSelection(boards, DNAs, fitnesses);
