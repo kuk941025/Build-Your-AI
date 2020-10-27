@@ -70,6 +70,16 @@ const Options = () => {
             text="Limit Population"
             value={genetics.LIMIT_POPULATION}
           />
+          <OptionText
+            handleChange={handleGenetics(GENETIC_TYPES.INIT_POPULATION)}
+            text="Initial Population"
+            value={genetics.INIT_POPULATION}
+          />
+          <OptionText
+            handleChange={handleGenetics(GENETIC_TYPES.LIMIT_POPULATION)}
+            text="Max. number of Stones"
+            value={genetics.MAX_DNA_SIZE}
+          />
         </div>
       </Accordion>
     </div>

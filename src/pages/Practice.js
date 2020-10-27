@@ -3,13 +3,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DisplayInfo from '@/components/DisplayInfo';
 import TopTen from '@/components/TopTen';
-import run from '@/genetics';
+import run, { reset } from '@/genetics';
 import Genetics from '@/configs/Genetics';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   btnRoot: {
     display: 'flex',
     justifyContent: 'flex-end',
+  },
+  button: {
+    margin: `0px ${theme.spacing(1)}px`,
   },
 }));
 
@@ -42,7 +45,7 @@ const initSettings = {
 const Practice = () => {
   const classes = useStyles();
   const [stats, setStats] = useState(initStats);
-  const [settings, setSettings] = useState(initSettings);
+  const [settings, _] = useState(initSettings);
   const [topTen, setTopTen] = useState([]);
 
   const handleRun = () => {
@@ -61,7 +64,10 @@ const Practice = () => {
       <DisplayInfo title="Stats" names={statsNames} data={stats} />
       <DisplayInfo title="Settings" names={settingNames} data={settings} />
       <div className={classes.btnRoot}>
-        <Button variant="contained" color="primary" onClick={handleRun}>
+        <Button className={classes.button} variant="contained" color="primary" onClick={reset}>
+          Reset
+        </Button>
+        <Button className={classes.button} variant="contained" color="primary" onClick={handleRun}>
           Run
         </Button>
       </div>
