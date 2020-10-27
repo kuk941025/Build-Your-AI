@@ -93,7 +93,7 @@ export const calcFitness = (boards, DNAs = []) => {
     fitnesses: fitnesses.map(f => f.score),
     maxFitness,
     population: DNAs.length,
-    avgScore: Math.floor(sum / DNAs.length),
+    avgScore: (sum / DNAs.length).toFixed(5),
     omok,
     topTen: fitnesses.sort((a, b) => b.score - a.score).slice(0, 10),
   };
