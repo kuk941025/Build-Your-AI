@@ -18,6 +18,23 @@ export default function run() {
   return calculated;
 }
 
+export const runUntil = () => {
+  let generation = 1;
+  let result;
+  while (true) {
+    generation++;
+    result = run();
+
+    console.log(result.maxFitness, generation);
+    if (result.omok >= 1) break;
+  }
+
+  return {
+    ...result,
+    generation,
+  };
+};
+
 export const reset = () => {
   boards = initBoards(DefaultGenetics.INIT_POPULATION);
   DNAs = initDNAs(DefaultGenetics.INIT_POPULATION);

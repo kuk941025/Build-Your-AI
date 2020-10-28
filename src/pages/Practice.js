@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DisplayInfo from '@/components/DisplayInfo';
 import TopTen from '@/components/TopTen';
-import run, { reset } from '@/genetics';
+import run, { reset, runUntil } from '@/genetics';
 import Genetics from '@/configs/Genetics';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,14 +58,29 @@ const Practice = () => {
       population: result.population,
       avgScore: result.avgScore,
     });
+  };  
+
+  const handleRunUntil = () => {
+    const result = runUntil();
+
+    setTopTen(result.topTen);
+    setStats({
+      generation: result.generation,
+      bestScore: result.maxFitness,
+      population: result.population,
+      avgScore: result.avgScore,
+    });
   };
   return (
     <div>
       <DisplayInfo title="Stats" names={statsNames} data={stats} />
       <DisplayInfo title="Settings" names={settingNames} data={settings} />
       <div className={classes.btnRoot}>
-        <Button className={classes.button} variant="contained" color="secondary" onClick={reset}>
+        <Button className={classes.button} variant="contained" onClick={reset}>
           Reset
+        </Button>
+        <Button className={classes.button} variant="contained" color="primary" onClick={handleRunUntil}>
+          Run Until
         </Button>
         <Button className={classes.button} variant="contained" color="primary" onClick={handleRun}>
           Run
