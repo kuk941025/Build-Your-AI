@@ -21,18 +21,7 @@ const Main = () => {
   const classes = useStyles();
   const [board, setBoard] = useState(tempData);
   const [lastClicked, setClicked] = useState({ x: 0, y: 0, stone: 0 });
-  // const [board, setBoard] = useState(data);
-  // const handleBoardClick = (idx) => (x, y, stoneType) => {
-  //   const copied = [...boards[idx]];
-  //   copied[y][x] = stoneType;
 
-  //   setBoards(
-  //     boards.map((board, bIdx) => {
-  //       if (bIdx !== idx) return board;
-  //       else return copied;
-  //     })
-  //   );
-  // };
 
   const handleBoardClick = (x, y, stoneType) => {
     const copied = [...board];
@@ -50,9 +39,6 @@ const Main = () => {
   };
   return (
     <div className={classes.root}>
-      {/* {boards.map((board, idx) => (
-        <Board onClick={handleBoardClick(idx)} key={idx} size={200} board={board} />
-      ))} */}
       <Board onClick={handleBoardClick} size={600} board={board} />
       <Button onClick={handleShowStats} variant="contained" color="primary">
         Show

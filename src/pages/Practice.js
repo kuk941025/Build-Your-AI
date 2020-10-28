@@ -64,7 +64,7 @@ const Practice = () => {
       <DisplayInfo title="Stats" names={statsNames} data={stats} />
       <DisplayInfo title="Settings" names={settingNames} data={settings} />
       <div className={classes.btnRoot}>
-        <Button className={classes.button} variant="contained" color="primary" onClick={reset}>
+        <Button className={classes.button} variant="contained" color="secondary" onClick={reset}>
           Reset
         </Button>
         <Button className={classes.button} variant="contained" color="primary" onClick={handleRun}>

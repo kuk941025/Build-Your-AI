@@ -37,18 +37,6 @@ const DisplayInfo = ({ data, names, title }) => {
             <Typography className={classes.value}>{data[key]}</Typography>
           </React.Fragment>
         ))}
-        {/* <Typography className={classes.text}>generation</Typography>
-        <Typography className={classes.value}>{generation}</Typography>
-        <Typography className={classes.text}>population</Typography>
-        <Typography className={classes.value}>{population}</Typography>
-        <Typography className={classes.text}>Best Score</Typography>
-        <Typography className={classes.value}>{bestScore}</Typography>
-        <Typography className={classes.text}>Average Score</Typography>
-        <Typography className={classes.value}>{avgScore}</Typography>
-        <Typography className={classes.text}>Mutation Rate</Typography>
-        <Typography className={classes.value}>{mutationRate}</Typography>
-        <Typography className={classes.text}>Population limit</Typography>
-        <Typography className={classes.value}>{limit}</Typography> */}
       </div>
     </div>
   );
