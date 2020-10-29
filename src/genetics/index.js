@@ -19,6 +19,7 @@ export default function run() {
 }
 
 export const runUntil = () => {
+  const start = new Date().getTime();
   let generation = 1;
   let result;
   while (true) {
@@ -29,9 +30,12 @@ export const runUntil = () => {
     if (result.omok >= 1) break;
   }
 
+  const end = new Date().getTime();
+
   return {
     ...result,
     generation,
+    timeDiff: (end - start) / 1000,
   };
 };
 
