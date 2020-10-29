@@ -35,17 +35,18 @@ const settingNames = {
   initPopulation: 'Initial Population Size',
   maxDNA: 'Max. number of Stones',
 };
-const initSettings = {
+
+const getInitSettings = () => ({
   mutationRate: Genetics.MUTATION_RATE,
   limit: Genetics.LIMIT_POPULATION,
   initPopulation: Genetics.INIT_POPULATION,
   maxDNA: Genetics.MAX_DNA_SIZE,
-};
+});
 
 const Practice = () => {
   const classes = useStyles();
   const [stats, setStats] = useState(initStats);
-  const [settings, _] = useState(initSettings);
+  const [settings, setSettings] = useState(getInitSettings());
   const [topTen, setTopTen] = useState([]);
 
   const handleRun = () => {
@@ -58,7 +59,7 @@ const Practice = () => {
       population: result.population,
       avgScore: result.avgScore,
     });
-  };  
+  };
 
   const handleRunUntil = () => {
     const result = runUntil();
@@ -71,12 +72,18 @@ const Practice = () => {
       avgScore: result.avgScore,
     });
   };
+
+  const handleReset = () => {
+    reset();
+    setSettings(getInitSettings());
+  };
+
   return (
     <div>
       <DisplayInfo title="Stats" names={statsNames} data={stats} />
       <DisplayInfo title="Settings" names={settingNames} data={settings} />
       <div className={classes.btnRoot}>
-        <Button className={classes.button} variant="contained" onClick={reset}>
+        <Button className={classes.button} variant="contained" onClick={handleReset}>
           Reset
         </Button>
         <Button className={classes.button} variant="contained" color="primary" onClick={handleRunUntil}>
