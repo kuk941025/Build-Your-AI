@@ -71,7 +71,7 @@ const Practice = () => {
       population: result.population,
       avgScore: result.avgScore,
     });
-    console.log(result.timeDiff)
+    console.log(result.timeDiff);
   };
 
   const handleReset = () => {
