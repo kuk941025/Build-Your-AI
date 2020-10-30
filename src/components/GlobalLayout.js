@@ -28,4 +28,3 @@ const GlobalLayout = ({ children }) => {
 };
 
 export default GlobalLayout;
- 

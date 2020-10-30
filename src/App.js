@@ -9,9 +9,9 @@ const App = () => {
     <BrowserRouter>
       <GlobalLayout>
         <Switch>
-          <Route path="/" component={Practice} />
-          <Route path="/p" component={Practice} />
-          <Route path="/o" component={Options} />
+          <Route exact path="/" component={Practice} />
+          <Route  path="/p" component={Practice} />
+          <Route  path="/o" component={Options} />
         </Switch>
       </GlobalLayout>
     </BrowserRouter>
